@@ -21,7 +21,7 @@ class Scheduler
     {
         while (!$this->tasks->isEmpty()) {
             $task = $this->tasks->dequeue();
-            echo $task->run() . "\n";
+            $task->run();
             if (!$task->isFinished()) {
                 $this->schedule($task);
             }
