@@ -27,7 +27,12 @@ class Scheduler
     {
         while (!$this->tasks->isEmpty()) {
             $task = $this->tasks->dequeue();
-            $task->run();
+
+            $retval = $task->run();
+            if ($retval instanceof SystemCall) {
+                $retval($task, $this);
+                continue;
+            }
 
             if (!$task->isFinished()) {
                 $this->schedule($task);
