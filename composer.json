@@ -1,0 +1,7 @@
+{
+    "name": "wuwx/coroutine",
+    "description": "Simple PHP Coroutine",
+    "require": {
+        "php": ">=5.5"
+    }
+}
