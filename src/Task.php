@@ -7,6 +7,7 @@ class Task
     public $id;
     protected $coroutine;
     protected $started;
+    protected $message;
 
     public function __construct(Generator $coroutine)
     {
@@ -17,12 +18,19 @@ class Task
     public function run()
     {
         if ($this->started) {
-            return $this->coroutine->send(null);
+            $retval = $this->coroutine->send($this->message);
+            $this->message = null;
+            return $retval;
         } else {
             $this->started = true;
             return $this->coroutine->current();
         }
 
+    }
+
+    public function setMessage($value)
+    {
+        $this->message = $value;
     }
 
     public function isFinished() {
