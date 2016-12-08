@@ -4,6 +4,7 @@ use Generator;
 
 class Task
 {
+    public $id;
     protected $coroutine;
     protected $started;
 
