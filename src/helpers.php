@@ -3,11 +3,22 @@ use Coroutine\Scheduler;
 use Coroutine\SystemCall;
 use Coroutine\Task;
 
+if (!function_exists('taskId')) {
+    function taskId() {
+        return new SystemCall(
+            function(Task $task, Scheduler $scheduler) {
+                $task->setMessage($task->id);
+                $scheduler->schedule($task);
+            }
+        );
+    }
+}
+
 if (!function_exists('newTask')) {
     function newTask(Generator $coroutine) {
         return new SystemCall(
             function(Task $task, Scheduler $scheduler) use ($coroutine) {
-                $scheduler->newTask($coroutine);
+                $task->setMessage($scheduler->newTask($coroutine));
                 $scheduler->schedule($task);
             }
         );
