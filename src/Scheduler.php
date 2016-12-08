@@ -12,6 +12,12 @@ class Scheduler
         $this->tasks = new SplQueue();
     }
 
+    public function newTask(Generator $coroutine)
+    {
+        $task = new Task($coroutine);
+        $this->schedule($task);
+    }
+
     public function schedule(Task $task)
     {
         $this->tasks->enqueue($task);
@@ -22,6 +28,7 @@ class Scheduler
         while (!$this->tasks->isEmpty()) {
             $task = $this->tasks->dequeue();
             $task->run();
+
             if (!$task->isFinished()) {
                 $this->schedule($task);
             }
