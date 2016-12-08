@@ -5,28 +5,32 @@ use SplQueue;
 
 class Scheduler
 {
+    protected $queue;
     protected $tasks;
 
     public function __construct()
     {
-        $this->tasks = new SplQueue();
+        $this->tasks = [];
+        $this->queue = new SplQueue();
     }
 
     public function newTask(Generator $coroutine)
     {
         $task = new Task($coroutine);
+        $task->id = max(array_merge(array_keys($this->tasks), [0])) + 1;
+        $this->tasks[$task->id] = $task;
         $this->schedule($task);
     }
 
     public function schedule(Task $task)
     {
-        $this->tasks->enqueue($task);
+        $this->queue->enqueue($task);
     }
 
     public function run()
     {
-        while (!$this->tasks->isEmpty()) {
-            $task = $this->tasks->dequeue();
+        while (!$this->queue->isEmpty()) {
+            $task = $this->queue->dequeue();
 
             $retval = $task->run();
             if ($retval instanceof SystemCall) {
@@ -34,7 +38,9 @@ class Scheduler
                 continue;
             }
 
-            if (!$task->isFinished()) {
+            if ($task->isFinished()) {
+                unset($this->tasks[$task->id]);
+            } else {
                 $this->schedule($task);
             }
         }
