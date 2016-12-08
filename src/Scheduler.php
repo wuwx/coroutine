@@ -20,6 +20,7 @@ class Scheduler
         $task->id = max(array_merge(array_keys($this->tasks), [0])) + 1;
         $this->tasks[$task->id] = $task;
         $this->schedule($task);
+        return $task->id;
     }
 
     public function schedule(Task $task)
