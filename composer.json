@@ -6,6 +6,11 @@
         "php": ">=5.5"
     },
     "autoload": {
-        "psr-4": {"Coroutine\\": "src/"}
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "Coroutine\\": "src/"
+        }
     }
 }
