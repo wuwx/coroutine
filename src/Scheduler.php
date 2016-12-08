@@ -23,6 +23,24 @@ class Scheduler
         return $task->id;
     }
 
+    public function killTask($task_id)
+    {
+        if (!isset($this->tasks[$task_id])) {
+            return false;
+        }
+
+        unset($this->tasks[$task_id]);
+
+        foreach ($this->queue as $i => $task) {
+            if ($task->id === $task_id) {
+                unset($this->queue[$i]);
+                break;
+            }
+        }
+
+        return true;
+    }
+
     public function schedule(Task $task)
     {
         $this->queue->enqueue($task);
