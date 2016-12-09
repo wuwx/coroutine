@@ -1,4 +1,5 @@
 <?php
+use Coroutine\ReturnValue;
 use Coroutine\Scheduler;
 use Coroutine\SystemCall;
 use Coroutine\Task;
@@ -33,5 +34,11 @@ if (!function_exists('killTask')) {
                 $scheduler->schedule($task);
             }
         );
+    }
+}
+
+if (!function_exists('retval')) {
+    function retval($value) {
+        return new ReturnValue($value);
     }
 }
